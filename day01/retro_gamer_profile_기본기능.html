@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gamer Profile | Player 1</title>
+    <!-- 폰트 로드: 타이틀용 둥근모(DungGeunMo) 및 본문용 프리텐다드(Pretendard) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.css">
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+    
+    <style>
+        /* --- 테마 변수 및 전역 스타일 --- */
+        :root {
+            --bg-color: #121214;       /* 딥 다크 스페이스 */
+            --main-color: #39FF14;     /* 네온 그린 */
+            --sub-color: #FFD700;      /* 골드 옐로우 */
+            --accent-color: #FF007A;   /* 네온 핑크 (치트/강조용) */
+            --text-color: #F3F4F6;
+            --box-bg: rgba(20, 20, 25, 0.85);
+            --font-title: 'DungGeunMo', sans-serif;
+            --font-body: 'Pretendard', sans-serif;
+        }
+
+        /* 코나미 커맨드 작동 시 적용될 갓 모드 테마 */
+        body.god-mode {
+            --main-color: #FF007A;
+            --sub-color: #00F0FF;
+            animation: shake 0.2s ease-in-out infinite alternate;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            background-image: 
+                linear-gradient(rgba(18, 18, 20, 0.8) 50%, rgba(0, 0, 0, 0.9) 50%),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 4px, 6px 100%; /* 미세한 CRT 스캔라인 효과 */
+        }
+
+        /* 공통 레트로 스타일 클래스 */
+        .neon-text {
+            font-family: var(--font-title);
+            color: var(--main-color);
+            text-shadow: 0 0 8px var(--main-color), 0 0 20px rgba(57, 255, 20, 0.5);
+            letter-spacing: 1px;
+        }
+
+        .gold-text {
+            color: var(--sub-color) !important;
+            text-shadow: 0 0 8px var(--sub-color);
+        }
+
+        .arcade-box {
+            border: 4px solid var(--main-color);
+            background-color: var(--box-bg);
+            padding: 24px;
+            position: relative;
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.15), inset 0 0 10px rgba(57, 255, 20, 0.1);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .arcade-box::before {
+            content: '';
+            position: absolute;
+            top: -4px; left: 10px; right: 10px; height: 4px;
+            background-color: var(--bg-color);
+        }
+
+        .arcade-box::after {
+            content: '';
+            position: absolute;
+            bottom: -4px; left: 10px; right: 10px; height: 4px;
+            background-color: var(--bg-color);
+        }
+
+        /* 섹션 패널 공통 */
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 20px;
+            position: relative;
+        }
+
+        /* --- 🧱 Section 1: 타이틀 스크린 (Intro) --- */
+        #intro {
+            text-align: center;
+            justify-content: space-between;
+            padding: 80px 20px;
+        }
+
+        .status-header {
+            font-family: var(--font-title);
+            font-size: 1.1rem;
+            color: var(--sub-color);
+            letter-spacing: 2px;
+            animation: blink 1.5s infinite;
+        }
+
+        .title-container {
+            margin: auto 0;
+            z-index: 10;
+        }
+
+        .connecting {
+            font-family: var(--font-title);
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #888;
+            letter-spacing: 3px;
+        }
+
+        .big-title {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            transform: scale(1);
+            transition: transform 0.3s;
+        }
+
+        .catchphrase {
+            font-size: 1.25rem;
+            max-width: 700px;
+            line-height: 1.7;
+            margin: 25px auto 0 auto;
+            word-break: keep-all;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border-left: 4px solid var(--sub-color);
+            border-radius: 0 8px 8px 0;
+        }
+
+        .start-btn {
+            font-family: var(--font-title);
+            font-size: 1.8rem;
+            background: transparent;
+            color: var(--sub-color);
+            border: 4px solid var(--sub-color);
+            padding: 18px 40px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+            animation: pulse 1.5s infinite;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+            margin-bottom: 40px;
+        }
+
+        .start-btn:hover {
+            background-color: var(--sub-color);
+            color: #000;
+            box-shadow: 0 0 25px var(--sub-color);
+            transform: scale(1.05);
+        }
+
+        /* --- 🗂️ Section 2: 캐릭터 선택창 (About Me) --- */
+        #about {
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: var(--font-title);
+            font-size: 2.8rem;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .profile-container {
+            display: grid;
+            grid-template-columns: 1fr 1.1fr 1fr;
+            gap: 30px;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .avatar-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .avatar-slider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .slider-arrow {
+            background: none;
+            border: none;
+            color: var(--main-color);
+            font-family: var(--font-title);
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 10px;
+            transition: transform 0.1s;
+        }
+
+        .slider-arrow:active {
+            transform: scale(0.8);
+        }
+
+        .avatar-frame {
+            width: 160px;
+            height: 160px;
+            border: 4px solid var(--main-color);
+            background-color: #222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 5.5rem;
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.2);
+            user-select: none;
+        }
+
+        .level-badge {
+            font-family: var(--font-title);
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+        }
+
+        .exp-container {
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .exp-label {
+            font-family: var(--font-title);
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            color: #aaa;
+        }
+
+        .exp-bar-bg {
+            width: 100%;
+            height: 24px;
+            background-color: #111;
+            border: 3px solid #555;
+            padding: 2px;
+            overflow: hidden;
+        }
+
+        .exp-bar-fill {
+            width: 65%; /* 기본 진행도 65% */
+            height: 100%;
+            background-color: var(--main-color);
+            box-shadow: 0 0 10px var(--main-color);
+            transition: width 1s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .exp-detail-text {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .info-pane, .stat-pane {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .pane-item {
+            margin-bottom: 18px;
+        }
+
+        .pane-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .pane-label {
+            font-family: var(--font-title);
+            color: var(--sub-color);
+            display: block;
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+        }
+
+        .pane-value {
+            font-size: 1rem;
+            color: #e5e7eb;
+            line-height: 1.5;
+        }
+
+        /* --- 📊 Section 3: 스테이터스 & 인벤토리 --- */
+        #skills {
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1.22fr 0.78fr;
+            gap: 40px;
+            width: 100%;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .skill-card {
+            border-left: 6px solid var(--main-color);
+        }
+
+        .skill-card h3 {
+            font-family: var(--font-title);
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .skill-card p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #d1d5db;
+            word-break: keep-all;
+        }
+
+        .inventory-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .inventory-title {
+            font-family: var(--font-title);
+            color: var(--main-color);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+        }
+
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .inventory-item {
+            aspect-ratio: 1;
+            border: 3px solid #444;
+            background-color: #1c1c22;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 8px;
+        }
+
+        .inventory-item:hover {
+            border-color: var(--sub-color);
+            background-color: #2a2a35;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.25);
+            transform: translateY(-5px);
+        }
+
+        .inventory-item .item-icon {
+            font-size: 2.2rem;
+            margin-bottom: 6px;
+            transition: transform 0.2s;
+        }
+
+        .inventory-item:hover .item-icon {
+            transform: scale(1.15) rotate(5deg);
+        }
+
+        .inventory-item .item-name {
+            font-family: var(--font-title);
+            font-size: 0.8rem;
+            color: #aaa;
+            text-align: center;
+        }
+
+        .inventory-item:hover .item-name {
+            color: var(--sub-color);
+        }
+
+        /* 빈 슬롯 효과 */
+        .inventory-item.empty-slot {
+            cursor: default;
+            border-style: dashed;
+            opacity: 0.4;
+        }
+
+        .inventory-item.empty-slot:hover {
+            transform: none;
+            box-shadow: none;
+            border-color: #444;
+        }
+
+        /* --- 📝 Section 4: 퀘스트 보드 (방명록) --- */
+        #quests {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .quest-form-box {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .quest-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .quest-label {
+            font-family: var(--font-title);
+            color: var(--sub-color);
+            font-size: 1rem;
+        }
+
+        .quest-input {
+            background-color: #111;
+            border: 2px solid var(--main-color);
+            color: var(--text-color);
+            padding: 12px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            outline: none;
+            transition: box-shadow 0.2s;
+        }
+
+        .quest-input:focus {
+            box-shadow: 0 0 10px rgba(57, 255, 20, 0.4);
+        }
+
+        .quest-select {
+            background-color: #111;
+            border: 2px solid var(--main-color);
+            color: var(--text-color);
+            padding: 12px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .quest-btn {
+            grid-column: span 2;
+            font-family: var(--font-title);
+            font-size: 1.3rem;
+            background: var(--main-color);
+            color: #000;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .quest-btn:hover {
+            background-color: #fff;
+            color: #000;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* 수락된 퀘스트 보드 목록 */
+        .quest-board-title {
+            font-family: var(--font-title);
+            color: var(--sub-color);
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 2px dashed var(--main-color);
+            padding-bottom: 10px;
+        }
+
+        .quest-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        /* 스크롤바 디자인 */
+        .quest-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        .quest-list::-webkit-scrollbar-track {
+            background: #111;
+        }
+        .quest-list::-webkit-scrollbar-thumb {
+            background: var(--main-color);
+        }
+
+        .quest-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 2px solid #444;
+            background-color: rgba(20, 20, 25, 0.6);
+            padding: 15px 20px;
+            transition: all 0.2s;
+        }
+
+        .quest-item:hover {
+            border-color: var(--main-color);
+            transform: translateX(5px);
+        }
+
+        .quest-info-left {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .quest-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .quest-badge {
+            font-family: var(--font-title);
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .quest-badge.coffee { background-color: #8b5a2b; color: #fff; }
+        .quest-badge.lunch { background-color: #d2691e; color: #fff; }
+        .quest-badge.chat { background-color: #2e8b57; color: #fff; }
+        .quest-badge.review { background-color: #4682b4; color: #fff; }
+
+        .quest-giver {
+            font-family: var(--font-title);
+            color: var(--main-color);
+            font-size: 0.95rem;
+        }
+
+        .quest-desc {
+            font-size: 0.9rem;
+            color: #d1d5db;
+        }
+
+        .quest-status-right {
+            font-family: var(--font-title);
+            font-size: 0.9rem;
+            color: var(--sub-color);
+            border: 2px solid var(--sub-color);
+            padding: 4px 10px;
+        }
+
+        /* --- 🎁 커머 게임 UI 다이얼로그 모달 --- */
+        .game-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .game-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            max-width: 500px;
+            width: 90%;
+            border: 4px solid var(--sub-color);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .game-modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            font-family: var(--font-title);
+            font-size: 1.4rem;
+            color: var(--sub-color);
+            border-bottom: 2px solid var(--sub-color);
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .stat-spec {
+            margin-top: 15px;
+            background: rgba(255, 215, 0, 0.05);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            padding: 10px;
+            font-family: var(--font-title);
+            font-size: 0.9rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+        }
+
+        .close-modal-btn {
+            font-family: var(--font-title);
+            background: var(--sub-color);
+            color: #000;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background 0.2s;
+        }
+
+        .close-modal-btn:hover {
+            background-color: #fff;
+        }
+
+        /* 레트로 플래시 이펙트 */
+        .flash-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #fff;
+            opacity: 0;
+            z-index: 99999;
+            pointer-events: none;
+        }
+
+        /* --- 👾 푸터 (Footer) --- */
+        footer {
+            background-color: #08080a;
+            color: #555;
+            font-family: var(--font-title);
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 1rem;
+            border-top: 4px solid var(--main-color);
+            letter-spacing: 1px;
+        }
+
+        footer p {
+            margin-bottom: 8px;
+        }
+
+        /* --- 🎬 애니메이션 --- */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); }
+            50% { transform: scale(1.04); box-shadow: 0 0 25px rgba(255, 215, 0, 0.6); }
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(0px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(2px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(2px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        /* 반응형 디바이스 레이아웃 조정 */
+        @media (max-width: 900px) {
+            .profile-container {
+                grid-template-columns: 1fr;
+            }
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            .avatar-card {
+                order: -1; /* 모바일에서 캐릭터 아바타를 가장 위로 올림 */
+            }
+            .quest-form {
+                grid-template-columns: 1fr;
+            }
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+            .quest-btn {
+                grid-column: span 1;
+            }
+            .big-title {
+                font-size: 2.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 레트로 플래시 이펙트용 레이어 -->
+    <div id="flash-screen" class="flash-overlay"></div>
+
+    <!-- 🧱 Section 1: 타이틀 스크린 (Intro / 히어로) -->
+    <section id="intro">
+        <div class="status-header">⚡ SYSTEM STATUS: NEW_COWORKER_ONLINE</div>
+        
+        <div class="title-container">
+            <h3 class="connecting">[PLAYER 1] CONNECTING...</h3>
+            <h1 class="big-title neon-text">NEW CO-WORKER<br><span class="gold-text" style="font-size: 0.85em;">ENTERED THE GAME</span></h1>
+            <p class="catchphrase">
+                "로그인 완료. 팀의 승률을 <span class="gold-text">200%</span> 올려줄 히든 카드를 확인해 보세요.<br>
+                <span style="color: #888; font-size: 0.85rem; font-family: var(--font-title); display: block; margin-top: 10px;">(※ 주의: 끊임없이 레벨업해서 진화할 수 있음)</span>"
+            </p>
+        </div>
+
+        <a href="#about" class="start-btn" onclick="startAdventure(event)">[ PRESS START ]</a>
+    </section>
+
+    <!-- 🗂️ Section 2: 캐릭터 선택창 (About Me) -->
+    <section id="about">
+        <h2 class="section-title neon-text">CHARACTER STATUS</h2>
+        
+        <div class="profile-container">
+            <!-- 왼쪽 기본 정보창 -->
+            <div class="info-pane arcade-box">
+                <div class="pane-item">
+                    <span class="pane-label">👾 NAME</span>
+                    <p class="pane-value">홍길동 (Gamer)</p>
+                </div>
+                <div class="pane-item">
+                    <span class="pane-label">⚔️ CLASS</span>
+                    <p class="pane-value">성장형 풀스택 메이지</p>
+                </div>
+                <div class="pane-item">
+                    <span class="pane-label">⚡ SPECIAL SKILL</span>
+                    <p class="pane-value">오픈소스 파고들기, 신속한 트렌드 링크스타트</p>
+                </div>
+                <div class="pane-item">
+                    <span class="pane-label">🗺️ GUILD</span>
+                    <p class="pane-value">Next Team Guild (신규 파티원)</p>
+                </div>
+            </div>
+
+            <!-- 중앙 캐릭터 아바타 & 레벨/경험치 바 -->
+            <div class="avatar-card arcade-box" style="border-color: var(--sub-color); box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);">
+                <span class="pane-label" style="margin-bottom: 15px;">AVATAR SELECT</span>
+                <div class="avatar-slider">
+                    <button class="slider-arrow" onclick="changeAvatar(-1)">◀</button>
+                    <div id="avatar-display" class="avatar-frame">🧙‍♂️</div>
+                    <button class="slider-arrow" onclick="changeAvatar(1)">▶</button>
+                </div>
+                
+                <h3 id="char-level" class="neon-text level-badge">LV. 01 NEWBIE</h3>
+                
+                <div class="exp-container">
+                    <div class="exp-label">
+                        <span>EXP BAR (TO NEXT RANK)</span>
+                        <span id="exp-percentage">65%</span>
+                    </div>
+                    <div class="exp-bar-bg">
+                        <div id="exp-fill" class="exp-bar-fill"></div>
+                    </div>
+                    <p id="exp-subtext" class="exp-detail-text">다음 마스터 레벨까지 활발한 동료 퀘스트 수행 필요</p>
+                </div>
+            </div>
+
+            <!-- 오른쪽 능력치 설명창 -->
+            <div class="stat-pane arcade-box">
+                <div class="pane-item">
+                    <span class="pane-label">🎮 PLAY STYLE</span>
+                    <p class="pane-value" style="word-break: keep-all;">
+                        게임의 신규 던전 공략집을 파고들 듯, 새로운 기술 스택을 완전히 내 것으로 만드는 마르지 않는 지식 탐닉가입니다. 파티 플레이(협업) 시 최고의 효율을 뿜어냅니다!
+                    </p>
+                </div>
+                <div class="pane-item">
+                    <span class="pane-label">🛡️ CO-OP STYLE</span>
+                    <p class="pane-value" style="word-break: keep-all;">
+                        솔플보다는 광역 버프를 뿌리는 딜포터 성향입니다. 동료의 피드백을 유연하게 수용하고, 버그 몬스터가 출몰하면 즉시 디버깅 마법으로 처단합니다.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📊 Section 3: 스테이터스 & 인벤토리 (Skills & Portfolio) -->
+    <section id="skills">
+        <h2 class="section-title neon-text">PASSIVES & INVENTORY</h2>
+        
+        <div class="grid-container">
+            <!-- 패시브 스킬 (매력 포인트 3선) -->
+            <div class="skills-list">
+                <div class="skill-card arcade-box">
+                    <h3 class="gold-text">📈 [무한 레벨업] 마르지 않는 학습 동기</h3>
+                    <p>새로운 기술이나 트렌드가 배포되면 '신규 대규모 확장팩'이 열린 것처럼 가슴이 뜁니다. 튜토리얼 퀘스트를 깨부수듯 빠르게 기술을 습득하고 프로젝트에 최적의 효율로 이식해 냅니다.</p>
+                </div>
+                <div class="skill-card arcade-box">
+                    <h3 class="gold-text">🔍 [히든 퀘스트 클리어] 집요한 문제 해결력</h3>
+                    <p>아무리 풀기 어려운 기괴한 버그나 돌발 이슈를 마주해도 '히든 보스'를 처치하는 쾌감을 느낍니다. 로그 분석과 각종 위키 공략을 바탕으로 기어코 원인을 규명하고 해결법을 찾아냅니다.</p>
+                </div>
+                <div class="skill-card arcade-box">
+                    <h3 class="gold-text">🎒 [만렙 인벤토리] 넓은 기술 스펙트럼</h3>
+                    <p>하나의 무기(기술)만 고집하지 않고, 상황에 맞춰 다양한 보조 도구와 최적의 패키지를 자유롭게 장착합니다. 팀이 가장 가렵고 필요한 영역을 즉각 대체할 수 있는 유연한 스펙트럼을 소유하고 있습니다.</p>
+                </div>
+            </div>
+
+            <!-- 인벤토리 (기술 스택 마켓) -->
+            <div class="inventory-wrapper">
+                <h3 class="inventory-title">ACTIVE EQUIPMENT</h3>
+                <div class="inventory-grid">
+                    <div class="inventory-item" onclick="openItemModal('React')">
+                        <span class="item-icon">⚛️</span>
+                        <span class="item-name">React</span>
+                    </div>
+                    <div class="inventory-item" onclick="openItemModal('Javascript')">
+                        <span class="item-icon">🟨</span>
+                        <span class="item-name">JS ES6+</span>
+                    </div>
+                    <div class="inventory-item" onclick="openItemModal('CSS3')">
+                        <span class="item-icon">🎨</span>
+                        <span class="item-name">CSS3 / Tailwind</span>
+                    </div>
+                    <div class="inventory-item" onclick="openItemModal('Git')">
+                        <span class="item-icon">🐙</span>
+                        <span class="item-name">Git Guild</span>
+                    </div>
+                    <div class="inventory-item" onclick="openItemModal('Figma')">
+                        <span class="item-icon">📐</span>
+                        <span class="item-name">Figma Map</span>
+                    </div>
+                    <div class="inventory-item empty-slot">
+                        <span class="item-icon">❔</span>
+                        <span class="item-name">Next Skill</span>
+                    </div>
+                </div>
+                <p style="font-size:0.85rem; color:#888; text-align:center; margin-top:20px; font-family: var(--font-title);">장비를 클릭하여 아이템 고유 스펙 확인</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📝 Section 4: 퀘스트 보드 (Contact & 방명록) -->
+    <section id="quests">
+        <h2 class="section-title neon-text">DAILY QUEST BOARD</h2>
+        
+        <div class="quest-form-box arcade-box">
+            <h3 class="gold-text" style="font-family: var(--font-title); font-size:1.3rem; margin-bottom:20px; text-align:center;">
+                [DAILY QUEST: 신규 파티원에게 동료 매칭 요청하기]
+            </h3>
+            
+            <form class="quest-form" onsubmit="submitQuest(event)">
+                <div class="form-group">
+                    <label class="quest-label" for="quest-giver">👥 동료 모험가 이름</label>
+                    <input type="text" id="quest-giver" class="quest-input" placeholder="이름 혹은 닉네임" required>
+                </div>
+                <div class="form-group">
+                    <label class="quest-label" for="quest-type">⚔️ 퀘스트 유형</label>
+                    <select id="quest-type" class="quest-select">
+                        <option value="coffee">☕ 커피 레이드 (티타임)</option>
+                        <option value="lunch">🍖 점심 던전 크롤러 (식사)</option>
+                        <option value="chat">💬 길드 잡담 (수다)</option>
+                        <option value="review">🔍 코드 리뷰 레이드 (업무 피드백)</option>
+                    </select>
+                </div>
+                <div class="form-group full-width">
+                    <label class="quest-label" for="quest-msg">📜 퀘스트 상세 내용</label>
+                    <input type="text" id="quest-msg" class="quest-input" placeholder="커피 한잔 어때요? / 슬랙 채널 등록해주세요 등" required>
+                </div>
+                <button type="submit" class="quest-btn">[ QUEST ACCEPT (수락하기) ]</button>
+            </form>
+        </div>
+
+        <!-- 퀘스트 리스트 보드 -->
+        <div class="arcade-box" style="width:100%; border-color: var(--sub-color);">
+            <h3 class="quest-board-title">ACCEPTED QUESTS (수락된 퀘스트 로그)</h3>
+            <div id="quest-list" class="quest-list">
+                <!-- 초기 샘플 퀘스트들 -->
+                <div class="quest-item">
+                    <div class="quest-info-left">
+                        <div class="quest-meta">
+                            <span class="quest-badge coffee">coffee</span>
+                            <span class="quest-giver">길드마스터 김팀장</span>
+                        </div>
+                        <p class="quest-desc">신규 로그인 축하드립니다! 언제든지 커피 한잔 뽑으러 오세요.</p>
+                    </div>
+                    <div class="quest-status-right">COMPLETED</div>
+                </div>
+                <div class="quest-item">
+                    <div class="quest-info-left">
+                        <div class="quest-meta">
+                            <span class="quest-badge review">review</span>
+                            <span class="quest-giver">아처 이대리</span>
+                        </div>
+                        <p class="quest-desc">신규 프로젝트 구조 파악 후 코드 리뷰 퀘스트 예약합니다!</p>
+                    </div>
+                    <div class="quest-status-right">ACTIVE</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 (Footer) -->
+    <footer>
+        <p>© 2026 PLAYER 1 PORTFOLIO. ALL RIGHTS RESERVED.</p>
+        <p style="color: #444; margin-top: 8px; font-size: 0.9rem;">INSERT COIN TO CONTINUE // KEYBOARD INTERACTION AVAILABLE</p>
+    </footer>
+
+    <!-- 🎁 커스텀 게임 UI 모달 다이얼로그 -->
+    <div id="game-modal" class="game-modal">
+        <div class="modal-content arcade-box">
+            <div class="modal-header">
+                <span id="modal-title">ITEM SPEC</span>
+                <span id="modal-rarity" class="gold-text" style="font-size: 0.9rem;">LEGENDARY</span>
+            </div>
+            <div class="modal-body">
+                <p id="modal-desc">상세 아이템 설명이 들어갑니다.</p>
+                <div id="modal-stats" class="stat-spec">
+                    <!-- 아이템 전용 추가 능력치 -->
+                </div>
+            </div>
+            <button class="close-modal-btn" onclick="closeModal()">[ CONFIRM (확인) ]</button>
+        </div>
+    </div>
+
+    <!-- 🧠 스크립트 제어 영역 -->
+    <script>
+        /* --- Web Audio API를 활용한 효과음 합성 장치 --- */
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        // 동전 투입 & 스타트 레트로 사운드 (8비트 아케이드)
+        function playCoinSound() {
+            try {
+                initAudio();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                
+                let t = audioCtx.currentTime;
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                
+                osc.type = 'square';
+                // 레트로 아케이드 특유의 2단 도약음
+                osc.frequency.setValueAtTime(587.33, t); // D5
+                osc.frequency.setValueAtTime(880, t + 0.08); // A5
+                
+                gain.gain.setValueAtTime(0.15, t);
+                gain.gain.exponentialRampToValueAtTime(0.01, t + 0.35);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(t);
+                osc.stop(t + 0.35);
+            } catch (e) {
+                console.log("Audio play blocked by browser policies.");
+            }
+        }
+
+        // 레벨 업 사운드 (스케일 팬페어)
+        function playLevelUpSound() {
+            try {
+                initAudio();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                
+                let t = audioCtx.currentTime;
+                let freqs = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6 아르페지오
+                
+                freqs.forEach((freq, idx) => {
+                    let osc = audioCtx.createOscillator();
+                    let gain = audioCtx.createGain();
+                    
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, t + (idx * 0.08));
+                    
+                    gain.gain.setValueAtTime(0.15, t + (idx * 0.08));
+                    gain.gain.exponentialRampToValueAtTime(0.01, t + (idx * 0.08) + 0.25);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(t + (idx * 0.08));
+                    osc.stop(t + (idx * 0.08) + 0.25);
+                });
+            } catch (e) {
+                console.log("Audio play blocked.");
+            }
+        }
+
+        // 일반 클릭음
+        function playSelectSound() {
+            try {
+                initAudio();
+                let t = audioCtx.currentTime;
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(440, t);
+                osc.frequency.exponentialRampToValueAtTime(220, t + 0.1);
+                
+                gain.gain.setValueAtTime(0.1, t);
+                gain.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(t);
+                osc.stop(t + 0.1);
+            } catch (e) {}
+        }
+
+        /* --- PRESS START 클릭 연출 --- */
+        function startAdventure(event) {
+            event.preventDefault();
+            playCoinSound();
+            
+            // 시각적 플래시 이펙트 트리거
+            const flash = document.getElementById('flash-screen');
+            flash.style.opacity = '1';
+            setTimeout(() => {
+                flash.style.opacity = '0';
+                flash.style.transition = 'opacity 0.6s ease';
+            }, 50);
+
+            // 타겟 위치로 스무스 스크롤
+            const targetSection = document.querySelector('#about');
+            targetSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        /* --- 캐릭터 아바타 변경 로직 --- */
+        const avatars = ["🧙‍♂️", "👨‍💻", "🤺", "🐉", "🤖", "🦊"];
+        let currentAvatarIndex = 0;
+
+        function changeAvatar(dir) {
+            playSelectSound();
+            currentAvatarIndex += dir;
+            if (currentAvatarIndex < 0) currentAvatarIndex = avatars.length - 1;
+            if (currentAvatarIndex >= avatars.length) currentAvatarIndex = 0;
+            
+            document.getElementById('avatar-display').textContent = avatars[currentAvatarIndex];
+        }
+
+        /* --- 장비 인벤토리 세부 정보 주입 및 모달 표시 --- */
+        const itemSpecs = {
+            'React': {
+                title: '⚛️ Legendary Core: React',
+                rarity: 'LEGENDARY CORE',
+                desc: '프로젝트의 핵심 뼈대를 이루는 마법 핵입니다. 컴포넌트 단위의 엄격한 모듈화 및 선언적 상태 변경 마법을 통해 어떤 대규모 변경 사항도 완벽히 디펜스해 냅니다.',
+                stats: { 'CODING_POWER': '+95', 'DURABILITY': 'INFINITE' }
+            },
+            'Javascript': {
+                title: '🟨 Master Dagger: JavaScript',
+                rarity: 'MYTHIC BLADE',
+                desc: '모든 프론트엔드 환경을 장악하는 비장의 검입니다. 최신 비동기 마법(ES6+ Promise, Async/Await)을 자유자재로 다루며 어떤 난해한 애니메이션도 고속으로 참격해 냅니다.',
+                stats: { 'AGILITY': '+120', 'CRITICAL_RATE': '98%' }
+            },
+            'CSS3': {
+                title: '🎨 Spell Scroll: CSS3 & Tailwind',
+                rarity: 'EPIC SCROLL',
+                desc: '빛과 형상을 마음대로 조작하는 스펙트럼 스크롤입니다. 미학적인 미디어 쿼리와 Tailwind 그리드 속성을 사용해, 기기가 태블릿이든 폴더블폰이든 완벽한 차원으로 반응하게 공간을 재단합니다.',
+                stats: { 'AESTHETICS': '+85', 'FLEXIBILITY': '+110' }
+            },
+            'Git': {
+                title: '🐙 Guild Channel: Git',
+                rarity: 'RARE COMMUNICATION DEVICE',
+                desc: '길드 구성원 간의 동기화를 유도하는 텔레파시 장치입니다. 브랜치 전략(Git Flow)과 컨벤션 규칙을 완벽하게 수호하며, 충돌 리스크를 사전에 파단해 안전한 협업 연합전선을 지켜냅니다.',
+                stats: { 'TEAM_COOP': '+150', 'STABILITY': '+90' }
+            },
+            'Figma': {
+                title: '📐 Adventure Map: Figma',
+                rarity: 'RARE EXPEDITION MAP',
+                desc: '모험의 완벽한 이정표가 그려진 지도입니다. 피그마의 레이아웃 격자선과 시스템 디자인 토큰을 픽셀 단위로 정확하게 파싱하여 오차 없는 유저 경험(UX) 성곽을 구축해 냅니다.',
+                stats: { 'ACCURACY': '+100', 'INTELLIGENCE': '+80' }
+            }
+        };
+
+        function openItemModal(itemName) {
+            playSelectSound();
+            const spec = itemSpecs[itemName];
+            if (!spec) return;
+
+            document.getElementById('modal-title').textContent = spec.title;
+            document.getElementById('modal-rarity').textContent = spec.rarity;
+            document.getElementById('modal-desc').textContent = spec.desc;
+
+            // 스탯 컨테이너 비우고 채우기
+            const statsContainer = document.getElementById('modal-stats');
+            statsContainer.innerHTML = '';
+            for (const [key, val] of Object.entries(spec.stats)) {
+                statsContainer.innerHTML += `<div>⚔️ ${key}: <span class="gold-text">${val}</span></div>`;
+            }
+
+            document.getElementById('game-modal').classList.add('active');
+        }
+
+        function closeModal() {
+            playSelectSound();
+            document.getElementById('game-modal').classList.remove('active');
+        }
+
+        /* --- 일일 퀘스트 보드 수락 & 레벨업 시스템 --- */
+        let currentExp = 65;
+        let currentLevel = 1;
+
+        function submitQuest(event) {
+            event.preventDefault();
+            
+            const giverInput = document.getElementById('quest-giver');
+            const typeSelect = document.getElementById('quest-type');
+            const msgInput = document.getElementById('quest-msg');
+            
+            const name = giverInput.value.trim();
+            const type = typeSelect.value;
+            const message = msgInput.value.trim();
+            
+            if (!name || !message) return;
+
+            // 새로운 수락된 퀘스트 카탈로그 템플릿 생성
+            const list = document.getElementById('quest-list');
+            const item = document.createElement('div');
+            item.className = 'quest-item';
+            
+            // 배지 클래스 매칭
+            let badgeClass = 'chat';
+            if (type === 'coffee') badgeClass = 'coffee';
+            else if (type === 'lunch') badgeClass = 'lunch';
+            else if (type === 'review') badgeClass = 'review';
+
+            item.innerHTML = `
+                <div class="quest-info-left">
+                    <div class="quest-meta">
+                        <span class="quest-badge ${badgeClass}">${type}</span>
+                        <span class="quest-giver">${escapeHtml(name)}</span>
+                    </div>
+                    <p class="quest-desc">${escapeHtml(message)}</p>
+                </div>
+                <div class="quest-status-right">ACTIVE</div>
+            `;
+            
+            // 리스트 최상단에 추가
+            list.insertBefore(item, list.firstChild);
+
+            // 폼 필드 클리어
+            giverInput.value = '';
+            msgInput.value = '';
+
+            // EXP 보상 획득 및 애니메이션
+            gainExperience(35); // 35% 상승시킴으로써 레벨 2로 퀀텀 점프 유도
+        }
+
+        // 경험치 획득 및 레벨업 체크
+        function gainExperience(amount) {
+            currentExp += amount;
+            const fill = document.getElementById('exp-fill');
+            const pctLabel = document.getElementById('exp-percentage');
+            
+            if (currentExp >= 100) {
+                // 레벨업 연출 시작
+                currentExp -= 100;
+                currentLevel += 1;
+                
+                // 100%까지 채웠다가 레벨 증가 후 리셋 처리
+                fill.style.width = '100%';
+                pctLabel.textContent = '100%';
+                
+                setTimeout(() => {
+                    playLevelUpSound();
+                    
+                    // 레벨 배지 및 스탯 라벨 업데이트
+                    const levelBadge = document.getElementById('char-level');
+                    levelBadge.textContent = `LV. ${currentLevel.toString().padStart(2, '0')} FE_MASTER`;
+                    levelBadge.classList.add('gold-text');
+                    
+                    document.getElementById('exp-subtext').innerHTML = `👑 <span class="gold-text">LEVEL UP!</span> 이제 더 깊은 심화 퀘스트 도전에 준비가 되었습니다.`;
+                    
+                    // 신규 레벨에 따른 다음 바 퍼센티지 적용
+                    fill.style.width = currentExp + '%';
+                    pctLabel.textContent = currentExp + '%';
+
+                    // 플래시 및 흔들림 연출
+                    triggerLevelUpFlash();
+                }, 500);
+            } else {
+                playSelectSound();
+                fill.style.width = currentExp + '%';
+                pctLabel.textContent = currentExp + '%';
+            }
+        }
+
+        function triggerLevelUpFlash() {
+            const flash = document.getElementById('flash-screen');
+            flash.style.opacity = '0.4';
+            setTimeout(() => {
+                flash.style.opacity = '0';
+            }, 300);
+        }
+
+        // 보안 안전용 HTML 이스케이프 유틸
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        /* --- 🌟 이스터 에그: 코나미 커맨드 치트 코드 (↑ ↑ ↓ ↓ ← → ← → B A) --- */
+        const konamiCode = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
+        let konamiIndex = 0;
+
+        document.addEventListener('keydown', (e) => {
+            if (e.keyCode === konamiCode[konamiIndex]) {
+                konamiIndex++;
+                if (konamiIndex === konamiCode.length) {
+                    activateGodMode();
+                    konamiIndex = 0;
+                }
+            } else {
+                konamiIndex = 0;
+            }
+        });
+
+        function activateGodMode() {
+            document.body.classList.add('god-mode');
+            playLevelUpSound();
+            
+            // 모든 능력치 치트 변환
+            document.getElementById('char-level').textContent = "LV. 99 GOD_MODE_ADMIN";
+            document.getElementById('char-level').style.color = "var(--accent-color)";
+            document.getElementById('char-level').style.textShadow = "0 0 15px var(--accent-color)";
+            
+            const fill = document.getElementById('exp-fill');
+            fill.style.backgroundColor = 'var(--accent-color)';
+            fill.style.width = '100%';
+            document.getElementById('exp-percentage').textContent = 'MAX%';
+            document.getElementById('exp-subtext').innerHTML = `💥 <span class="gold-text">GOD MODE ACTIVATED!</span> 이스터 에그를 잠금 해제했습니다!`;
+            
+            // 신비로운 커스텀 모달 출력
+            setTimeout(() => {
+                document.getElementById('modal-title').textContent = "👾 SYSTEM BREAKDOWN";
+                document.getElementById('modal-rarity').textContent = "GOD MODE ACTIVED";
+                document.getElementById('modal-desc').textContent = "키보드 콤보 비기를 입력하셨군요! 진정한 아케이드 용사로 임명합니다. 이제 팀원들과 즐거운 미팅 레이드를 주도할 준비가 완벽히 마쳤습니다.";
+                
+                const statsContainer = document.getElementById('modal-stats');
+                statsContainer.innerHTML = '<div>⚔️ LUCK: <span class="gold-text">9999</span></div><div>⚔️ CODING_SPEED: <span class="gold-text">MAX</span></div>';
+                
+                document.getElementById('game-modal').classList.add('active');
+            }, 600);
+        }
+    </script>
+</body>
+</html>
